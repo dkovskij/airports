@@ -1,0 +1,50 @@
+<div class="aircrafts-form">
+  <input
+    (input)="validInput()"
+    [ngClass]="[noText ? 'error' : '', 'inp']"
+    type="text"
+    placeholder="Код самолета..."
+    [(ngModel)]="aircraftCode"
+  >
+  <input
+    (input)="validInput()"
+    [ngClass]="{'error': noText, 'inp': true}"
+    type="text"
+    placeholder="Тип самолета..."
+    [(ngModel)]="aircraftType"
+  >
+  <input
+    vali
+    (input)="validInput()"
+    [ngClass]="{'error': noText, 'inp': true}"
+    type="text"
+    placeholder="Бортовой номер самолета..."
+    [(ngModel)]="aircraftNum"
+  >
+  <input
+    (input)="validInput()"
+    [ngClass]="{'error': noText, 'inp': true}"
+    type="text"
+    placeholder="Марка самолета..."
+    [(ngModel)]="aircraftMan"
+  >
+  <input
+    (input)="validInput()"
+    [ngClass]="{'error': noText, 'inp': true}"
+    type="text"
+    placeholder="Модель самолета..."
+    [(ngModel)]="aircraftModel"
+  >
+  <input
+    (input)="validInput()"
+    [ngClass]="{'error': noText, 'inp': true}"
+    type="text"
+    placeholder="Код аэропорта приписки..."
+    [(ngModel)]="aircraftAirport"
+  >
+  <div>
+    <app-btn-cmp (buttonClick)="addAircraft()">
+      Добавить самолет
+    </app-btn-cmp>
+  </div>
+</div>

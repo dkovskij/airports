@@ -1,0 +1,70 @@
+<ul *ngIf="airports; else noAirports">
+  <li class="list-item" *ngFor="let airport of airports; let i = index">
+    <div *ngIf="showList; else showInput">
+      <p class="description">Код: {{airport.code | uppercase}}</p>
+      <p class="description">Название: {{airport.title}}</p>
+      <p class="description">Адрес: {{airport.address}}</p>
+      <div>
+        Приписанные самолеты
+        <p class="to-ports" *ngFor="let aircraft of aircrafts; let i = index">
+      <span *ngIf="airport.code.toLowerCase() === aircraft.airport.toLowerCase()">
+        {{aircraft.code | uppercase}}, {{aircraft.num}}, {{aircraft.type}}, {{aircraft.man}}-{{aircraft.model}}
+      </span>
+        </p>
+      </div>
+    </div>
+    <ng-template #showInput>
+      <div>
+        <p>Код: <input type="text" [placeholder]="airport.code | uppercase" [(ngModel)]="airportCode"></p>
+        <p>Название: <input type="text" [placeholder]="airport.title"></p>
+        <p>Адрес: <input type="text" [placeholder]="airport.address"></p>
+        <button class="btn save" (click)="save">Сохранить</button>
+        <div>
+          Приписанные самолеты
+          <p *ngFor="let aircraft of aircrafts; let i = index">
+      <span *ngIf="airport.code.toLowerCase() === aircraft.airport.toLowerCase()">
+        {{aircraft.code | uppercase}}, {{aircraft.num}}, {{aircraft.type}}, {{aircraft.man}}-{{aircraft.model}}
+      </span>
+          </p>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="btns-wrap">
+      <button class="btn edit" (click)="edit(i)">Изменить</button>
+      <button class="btn delete" (click)="delete(airport)">Удалить</button>
+    </div>
+
+  </li>
+  <div class="airports-form">
+    <input
+      (input)="validInput()"
+      [ngClass]="{'error': noText, 'inp': true}"
+      type="text"
+      placeholder="Код аэропорта..."
+      [(ngModel)]="airportCode"
+    >
+    <input
+      (input)="validInput()"
+      [ngClass]="{'error': noText, 'inp': true}"
+      type="text"
+      placeholder="Название аэропорта..."
+      [(ngModel)]="airportTitle"
+    >
+    <input
+      (input)="validInput()"
+      [ngClass]="{'error': noText, 'inp': true}"
+      type="text"
+      placeholder="Адрес аэропорта..."
+      [(ngModel)]="airportAddress"
+    >
+    <div>
+      <button class="btn add-airport" (click)="addAirport()">Добавить аэропорт</button>
+    </div>
+  </div>
+</ul>
+
+<ng-template #noAirports>
+  <p style="text-align: center;">Добавьте аэропорт</p>
+  <button class="add" (click)="addAirport()">Добавить аэропорт</button>
+</ng-template>

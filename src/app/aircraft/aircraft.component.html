@@ -1,0 +1,83 @@
+<div class="aircrafts">
+  <div class="aircraft-list">
+    <ul *ngIf="aircrafts; else noAircrafts">
+      <li class="list-item" *ngFor="let aircraft of aircrafts; let i = index">
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseCodeBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.code"
+            placeholder="Код самолета"
+          >
+        </div>
+        <ng-template #elseCodeBlock>
+          <p class="description">Код: {{aircraft.code | uppercase}}</p>
+        </ng-template>
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseTypeBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.type"
+            placeholder="Тип ВС..."
+          >
+        </div>
+        <ng-template #elseTypeBlock>
+          <p class="description">Тип ВС: {{aircraft.type}}</p>
+        </ng-template>
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseNumBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.num"
+            placeholder="Бортовой номер..."
+          >
+        </div>
+        <ng-template #elseNumBlock>
+          <p class="description">Бортовой номер: {{aircraft.num}}</p>
+        </ng-template>
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseManBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.man"
+            placeholder="Марка..."
+          >
+        </div>
+        <ng-template #elseManBlock>
+          <p class="description">Марка: {{aircraft.man}}</p>
+        </ng-template>
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseModelBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.model"
+            placeholder="Модель..."
+          >
+        </div>
+        <ng-template #elseModelBlock>
+          <p class="description">Модель: {{aircraft.model}}</p>
+        </ng-template>
+        <div class="input__wrapper" *ngIf="aircraft.id === selectedID; else elseAirportBlock">
+          <input
+            type="text"
+            [(ngModel)]="aircraft.airport"
+            placeholder="Порт приписки..."
+          >
+        </div>
+        <ng-template #elseAirportBlock>
+          <p class="description">Порт приписки: {{aircraft.airport | uppercase}}</p>
+        </ng-template>
+          <p class="description">ID: {{aircraft.id}}</p>
+        <div class="btns-wrap">
+          <app-btn-cmp (buttonClick)="onEdit(aircraft.id)">
+            {{ selectedID ? 'Сохранить' : 'Изменить' }}
+          </app-btn-cmp>
+          <app-btn-cmp bind-className="'delete'" (buttonClick)="deleteAircraft(aircraft)">
+            Удалить
+          </app-btn-cmp>
+        </div>
+      </li>
+    </ul>
+    <app-aircraft-add-cmp (reloadAirport)="getAircrafts()"></app-aircraft-add-cmp>
+  </div>
+</div>
+
+<ng-template #noAircrafts>
+  <p style="text-align: center;">Добавьте самолет</p>
+  <app-aircraft-add-cmp (reloadAirport)="getAircrafts()"></app-aircraft-add-cmp>
+</ng-template>

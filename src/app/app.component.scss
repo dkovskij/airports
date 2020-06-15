@@ -1,0 +1,10 @@
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.airports-wrapper, .aircraft-wrapper {
+  width: 50%;
+}
