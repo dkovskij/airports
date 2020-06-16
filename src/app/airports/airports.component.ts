@@ -1,43 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import {AirportService} from '../shared/airport.service';
-import {AircraftService} from '../shared/aircraft.service';
-import {Airport} from '../airport';
-import {Aircraft} from '../aircraft';
+import { Component, Input } from '@angular/core';
+import { Airport } from '../airport';
+import { Aircraft } from '../aircraft';
+import { EventBusService } from '../shared/event-bus.service';
+import { EventData } from '../shared/event';
 
 @Component({
   selector: 'app-airports',
   templateUrl: './airports.component.html',
   styleUrls: ['./airports.component.scss']
 })
-export class AirportsComponent implements OnInit {
+export class AirportsComponent {
 
-  airports: Airport[];
-  aircrafts: Aircraft[];
   airportCode = '';
   airportTitle = '';
   airportAddress = '';
-  showList = true;
   noText = true;
-  inputName = '';
+  selectedId: number;
 
-  constructor(private airportService: AirportService, private aircraftService: AircraftService) { }
+  @Input() airports: Airport[];
+  @Input() aircrafts: Aircraft[];
 
-  ngOnInit() {
-    this.getAirports();
-    this.getAircrafts();
-  }
+  constructor(private eventBusService: EventBusService) { }
 
-  getAirports(): void {
-    this.airportService.getAirports()
-      .subscribe(airports => this.airports = airports);
-  }
-  getAircrafts(): void {
-    this.aircraftService.getAircrafts()
-      .subscribe(aircrafts => this.aircrafts = aircrafts);
-  }
-
-  genId(airports: Airport[]): number {
-    return airports.length > 0 ? Math.max(...airports.map(airport => airport.id)) + 1 : 1;
+  genId(): number {
+    return this.airports.length > 0 ? this.airports[this.airports.length - 1].id + 1 : 1;
   }
 
   validInput() {
@@ -49,19 +35,17 @@ export class AirportsComponent implements OnInit {
   }
 
   addAirport() {
-    if (!this.airportCode || !this.airportTitle || !this.airportAddress) {
+    if (this.noText) {
       return;
     } else {
       const airport: Airport = {
-        id: this.genId(this.airports),
+        id: this.genId(),
         code: this.airportCode,
         title: this.airportTitle,
         address: this.airportAddress,
       };
-      this.airportService.addAirport(airport)
-        .subscribe(port => {
-          this.airports.push(port);
-        })
+
+      this.eventBusService.emit(new EventData('addAirport', airport));
 
       this.airportCode = '';
       this.airportTitle = '';
@@ -72,17 +56,15 @@ export class AirportsComponent implements OnInit {
   }
 
   delete(airport: Airport): void {
-    this.airports = this.airports.filter(h => h !== airport);
-    this.airportService.deleteAirport(airport).subscribe();
+    this.eventBusService.emit(new EventData('deleteAirport', airport));
   }
 
-  edit(i) {
-    if (this.showList === true) {
-      this.showList = false;
-    } else {
-      this.showList = true;
+  edit(airport: Airport) {
+    if (this.selectedId) {
+      this.eventBusService.emit(new EventData('updateAirport', airport));
+      this.selectedId = 0;
+      return;
     }
-    console.log(i);
+    this.selectedId = airport.id;
   }
-
 }

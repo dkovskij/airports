@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {catchError, map, tap} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import {Aircraft} from '../aircraft';
 
@@ -31,7 +30,7 @@ export class AircraftService {
   }
 
   deleteAircraft(aircraft: Aircraft): Observable<Aircraft> {
-    const id = typeof aircraft === 'number' ? aircraft : aircraft.id;
+    const id = aircraft.id;
     const url = `${this.aircraftsUrl}/${id}`;
 
     return this.http.delete<Aircraft>(url, this.httpOptions);

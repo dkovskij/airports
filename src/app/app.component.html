@@ -1,8 +1,8 @@
 <div class="app-container">
   <div class="airports-wrapper">
-    <app-airports #airports></app-airports>
+    <app-airports [airports]="airports" [aircrafts]="aircrafts"></app-airports>
   </div>
   <div class="aircraft-wrapper">
-    <app-aircraft [aircrafts]="aircrafts" (reloadAirport)="onEdit($event)"></app-aircraft>
+    <app-aircraft [aircrafts]="aircrafts"></app-aircraft>
   </div>
 </div>

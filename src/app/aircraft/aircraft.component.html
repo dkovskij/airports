@@ -62,18 +62,21 @@
         <ng-template #elseAirportBlock>
           <p class="description">Порт приписки: {{aircraft.airport | uppercase}}</p>
         </ng-template>
-          <p class="description">ID: {{aircraft.id}}</p>
         <div class="btns-wrap">
-          <app-btn-cmp (buttonClick)="onEdit(aircraft.id)">
-            {{ selectedID ? 'Сохранить' : 'Изменить' }}
-          </app-btn-cmp>
-          <app-btn-cmp bind-className="'delete'" (buttonClick)="deleteAircraft(aircraft)">
-            Удалить
-          </app-btn-cmp>
+          <div class="btn-wrap change">
+            <app-btn-cmp (buttonClick)="onEdit(aircraft.id)">
+              {{ selectedID ? 'Сохранить' : 'Изменить' }}
+            </app-btn-cmp>
+          </div>
+          <div class="btn-wrap delete">
+            <app-btn-cmp (buttonClick)="deleteAircraft(aircraft)">
+              Удалить
+            </app-btn-cmp>
+          </div>
         </div>
       </li>
     </ul>
-    <app-aircraft-add-cmp (reloadAirport)="getAircrafts()"></app-aircraft-add-cmp>
+    <app-aircraft-add-cmp [aircrafts]="aircrafts"></app-aircraft-add-cmp>
   </div>
 </div>
 

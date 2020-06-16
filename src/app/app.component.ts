@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {AirportService} from './shared/airport.service';
-import {Aircraft} from './aircraft';
-import {AircraftService} from './shared/aircraft.service';
-import {Airport} from './airport';
+import { AirportService } from './shared/airport.service';
+import { Aircraft } from './aircraft';
+import { AircraftService } from './shared/aircraft.service';
+import { Airport } from './airport';
+import { EventBusService } from './shared/event-bus.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,8 @@ import {Airport} from './airport';
 })
 export class AppComponent implements OnInit {
   constructor(private airportService: AirportService,
-              private aircraftService: AircraftService
+              private aircraftService: AircraftService,
+              private eventBusService: EventBusService
               ) {}
 
   aircrafts: Aircraft[];
@@ -19,6 +21,49 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getAircrafts();
+    this.getAirports();
+
+    this.eventBusService.on('addAircraft', (data: Aircraft) => {
+      this.aircraftService.addAircraft(data)
+        .subscribe((_) => {
+          this.getAircrafts();
+        });
+    });
+
+    this.eventBusService.on('updateAircraft', (data: Aircraft) => {
+      this.aircraftService.updateAircraft(data)
+        .subscribe(_ => {
+          this.getAircrafts();
+        });
+    });
+
+    this.eventBusService.on('deleteAircraft', (data: Aircraft) => {
+      this.aircraftService.deleteAircraft(data)
+        .subscribe((_) => {
+          this.getAircrafts();
+        });
+    });
+
+    this.eventBusService.on('addAirport', (data: Airport) => {
+      this.airportService.addAirport(data)
+        .subscribe(res => {
+          this.airports.push(res);
+        });
+    });
+
+    this.eventBusService.on('updateAirport', (data: Airport) => {
+      this.airportService.updateAirport(data)
+        .subscribe(res => {
+          this.getAirports();
+        });
+    });
+
+    this.eventBusService.on('deleteAirport', (data: Airport) => {
+      this.airportService.deleteAirport(data)
+        .subscribe((_) => {
+          this.getAirports();
+        });
+    });
   }
 
   getAirports(): void {
@@ -29,18 +74,5 @@ export class AppComponent implements OnInit {
   getAircrafts(): void {
     this.aircraftService.getAircrafts()
       .subscribe(aircrafts => this.aircrafts = aircrafts);
-  }
-
-  onEdit(value) {
-    if (value === 'aircraft') {
-      this.getAircrafts();
-    }
-  }
-
-  deleteAircraft(aircraft: Aircraft) {
-    this.aircrafts = this.aircrafts.filter(h => h.id !== aircraft.id);
-    this.aircraftService.deleteAircraft(aircraft).subscribe(_ => {
-      this.getAircrafts();
-    });
   }
 }

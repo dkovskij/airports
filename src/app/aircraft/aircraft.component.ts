@@ -1,6 +1,8 @@
-import {Component, EventEmitter, Output, Input} from '@angular/core';
-import {Aircraft} from '../aircraft';
-import {AircraftService} from '../shared/aircraft.service';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Aircraft } from '../aircraft';
+import { AircraftService } from '../shared/aircraft.service';
+import { EventBusService } from '../shared/event-bus.service';
+import { EventData } from '../shared/event';
 
 
 @Component({
@@ -16,7 +18,12 @@ export class AircraftComponent {
   @Output() reloadAirport = new EventEmitter();
   @Output() onDeleteAircraft = new EventEmitter();
 
-  constructor(private aircraftService: AircraftService) {
+  constructor(private aircraftService: AircraftService,
+              private eventBusService: EventBusService) {
+  }
+
+  getAircrafts() {
+    this.reloadAirport.emit();
   }
 
   onEdit(id) {
@@ -24,10 +31,7 @@ export class AircraftComponent {
       this.selectedID = null;
       for (let i = 0; i < this.aircrafts.length; i++) {
         if (this.aircrafts[i].id === id) {
-          this.aircraftService.updateAircraft(this.aircrafts[i])
-            .subscribe(_ => {
-              this.reloadAirport.emit('aircraft');
-            });
+          this.eventBusService.emit(new EventData('updateAircraft', this.aircrafts[i]));
         }
       }
       return;
@@ -36,6 +40,6 @@ export class AircraftComponent {
   }
 
   deleteAircraft(aircraft: Aircraft): void {
-    this.onDeleteAircraft.emit(aircraft);
+    this.eventBusService.emit(new EventData('deleteAircraft', aircraft));
   }
 }

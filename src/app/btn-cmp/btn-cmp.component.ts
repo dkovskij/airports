@@ -1,16 +1,13 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-btn-cmp',
   templateUrl: './btn-cmp.component.html',
-  styleUrls: ['./btn-cmp.component.scss']
+  styleUrls: ['./btn-cmp.component.scss'],
 })
-export class BtnCmpComponent implements OnInit {
+export class BtnCmpComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   @Output() buttonClick = new EventEmitter();
 

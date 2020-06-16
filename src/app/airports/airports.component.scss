@@ -1,10 +1,54 @@
 .to-ports {
   margin: 5px 0;
 }
-.add-airport {
-  width: 80%;
-  height: 40px;
-}
 .error {
   border: 2px solid red;
+}
+.input__wrapper {
+  margin-bottom: 10px;
+
+  input {
+    width: 50%;
+    outline: none;
+    font-size: 14px;
+    height: 2rem;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #a6a5a7
+  }
+}
+
+.btns-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.btn-wrap {
+  padding: 0 10px;
+  border-radius: 40px;
+  height: 30px;
+}
+.btn-wrap.delete {
+  width: auto;
+  background-color: #9c0000;
+}
+.btn-wrap.delete:hover {
+  background-color: #690000;
+}
+.btn-wrap.edit {
+  width: auto;
+  background-color: #A1B92E;
+  margin-right: 10px;
+}
+.btn-wrap.edit:hover {
+  background-color: #8c9d4f;
+}
+.btn-wrap.add-airport {
+  width: 80%;
+  background-color: #A1B92E;
+  height: 40px;
+  border-radius: 40px;
+}
+.btn-wrap.add-airport:hover {
+  background-color: #8c9d4f;
 }

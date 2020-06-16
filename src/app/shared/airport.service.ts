@@ -1,12 +1,9 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {Airport} from '../airport';
+import { Airport } from '../airport';
 
 @Injectable({providedIn: 'root'})
-
-
-
 export class AirportService {
 
   constructor(private http: HttpClient) {}
@@ -23,6 +20,10 @@ export class AirportService {
 
   addAirport(airport: Airport): Observable<Airport> {
     return this.http.post<Airport>(this.airportsUrl, airport, this.httpOptions);
+  }
+
+  updateAirport(airport: Airport): Observable<any> {
+    return this.http.put(this.airportsUrl, airport, this.httpOptions);
   }
 
   deleteAirport(airport: Airport): Observable<Airport> {

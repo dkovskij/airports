@@ -1,13 +1,14 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Aircraft} from '../aircraft';
-import {AircraftService} from '../shared/aircraft.service';
+import { Component, Input } from '@angular/core';
+import { Aircraft } from '../aircraft';
+import { EventBusService } from '../shared/event-bus.service';
+import { EventData } from '../shared/event';
 
 @Component({
   selector: 'app-aircraft-add-cmp',
   templateUrl: './aircraft-add-cmp.component.html',
   styleUrls: ['./aircraft-add-cmp.component.scss']
 })
-export class AircraftAddCmpComponent implements OnInit {
+export class AircraftAddCmpComponent {
 
   aircraftCode = '';
   noText = true;
@@ -16,19 +17,13 @@ export class AircraftAddCmpComponent implements OnInit {
   aircraftMan = '';
   aircraftModel = '';
   aircraftAirport = '';
-  aircrafts: Aircraft[];
 
-  constructor(private aircraftService: AircraftService) { }
+  @Input() aircrafts: Aircraft[];
 
-  ngOnInit() {
-      this.aircraftService.getAircrafts()
-        .subscribe(aircrafts => this.aircrafts = aircrafts);
-  }
+  constructor(private eventBusService: EventBusService) { }
 
-  @Output() reloadAirport = new EventEmitter();
-
-  genId(aircrafts: Aircraft[]): number {
-    return aircrafts.length > 0 ? aircrafts[aircrafts.length - 1].id + 1 : 1;
+  genId(length: number): number {
+    return length > 0 ? this.aircrafts[length - 1].id + 1 : 1;
   }
 
   validInput() {
@@ -42,11 +37,16 @@ export class AircraftAddCmpComponent implements OnInit {
   }
 
   addAircraft() {
-    if (!this.aircraftCode || !this.aircraftCode || !this.aircraftType || !this.aircraftNum || !this.aircraftMan || !this.aircraftModel) {
+    if (!this.aircraftCode ||
+      !this.aircraftCode ||
+      !this.aircraftType ||
+      !this.aircraftNum ||
+      !this.aircraftMan ||
+      !this.aircraftModel) {
       return;
     } else {
       const aircraft: Aircraft = {
-        id: this.genId(this.aircrafts),
+        id: this.genId(this.aircrafts.length),
         code: this.aircraftCode,
         type: this.aircraftType,
         num: this.aircraftNum,
@@ -54,10 +54,9 @@ export class AircraftAddCmpComponent implements OnInit {
         model: this.aircraftModel,
         airport: this.aircraftAirport
       };
-      this.aircraftService.addAircraft(aircraft)
-        .subscribe(craft => {
-          this.aircrafts.push(craft);
-        });
+
+      this.eventBusService.emit(new EventData('addAircraft', aircraft));
+
       this.aircraftCode = '';
       this.aircraftType = '';
       this.aircraftNum = '';
@@ -65,9 +64,6 @@ export class AircraftAddCmpComponent implements OnInit {
       this.aircraftModel = '';
       this.aircraftAirport = '';
       this.noText = true;
-
-      this.reloadAirport.emit(null);
     }
-
   }
 }
